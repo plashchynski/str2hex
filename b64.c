@@ -2,7 +2,7 @@
  * b64.c
  * This file is part of str2hex
  *
- * Copyright (C) 2008 - Dmitry Plashchynski <dmitry@plashchynski.net>
+ * Copyright (C) 2008 - Dmitry Plashchynski <plashchynski@gmail.com>
  *
  * str2hex is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

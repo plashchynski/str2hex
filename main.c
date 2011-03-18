@@ -2,7 +2,7 @@
  * main.c
  * This file is part of str2hex
  *
- * Copyright (C) 2008 - Dmitry Plashchynski <dmitry@plashchynski.net>
+ * Copyright (C) 2008 - Dmitry Plashchynski <plashchynski@gmail.com>
  *
  * str2hex is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -446,7 +446,8 @@ static void usage(void)
 		"   -u   : output in URL format: %%EF%%F0%%E5%%E2%%E5%%E4%%21...\n" \
 		"   -x   : output in HTML hex format: &#x6C;&#x6F;&#x78;&#x78;...\n" \
 		"   -xe  : output in HTML escape codes: &iexcl;&#178;&copy;...\n" \
-		"   -xw  :  *  HTML escape codes, without semicolons: &#108&#111...\n" \		"   -b (-base64[=linesize] | -b64[=linesize] ) : output in Base64: YmZnYmRiZ2Q=\n" \
+		"   -xw  :  *  HTML escape codes, without semicolons: &#108&#111...\n" \
+		"   -b (-base64[=linesize] | -b64[=linesize] ) : output in Base64: YmZnYmRiZ2Q=\n" \
 		"   -bn  : output in Base64, but do not newline formating.\n"
 		"   -md5 : output MD5 (RFC 1321) hash: 929ae467fe43191eff23b9a0e1471d04\n\n" \
 		"Exemples:\n" \
