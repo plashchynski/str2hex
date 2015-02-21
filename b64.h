@@ -20,4 +20,3 @@ void base64_init(base64_state_t *stat);
 char *base64_append(base64_state_t *stat, char *in , size_t in_len, size_t *out_len, int mode);
 
 #endif
-

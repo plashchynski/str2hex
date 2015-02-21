@@ -2,7 +2,7 @@
  * process.c
  * This file is part of str2hex project.
  *
- * Copyright 2005 Dzmitry Plashchynski plashchynski@gmail.com
+ * Copyright 2005 Dzmitry Plashchynski <plashchynski@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 
 	gcount++;
 
-	/************************
-	 *             BASE64             *
-	 ************************/
+	/* Base64 */
 	if (config->mode == 7)
 	{
 		static base64_state_t	b64_state;
@@ -54,34 +52,26 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 		return out_buffer;	
 	}
 
-
-
-	/********************************
-	 * Num base10 to num base16  *
-	 ********************************/
-	if (config->mode == 10)
+	/* Base10 number to Base16 numbers */
+	if (config->mode == 10) /* -n and -no options */
 	{
 		int num = atoi((char*)buf);
 		switch (config->mode2)
 		{
-			case 1:
-				out_buffer = malloc(strlen((char*)buf) * 2);
+			case 1: /* -n and -no options */
+				out_buffer = malloc(strlen((char*)buf) * 2); /* -no options */
 				*out_size += sprintf(out_buffer+*out_size,"%o", num);
 				break;
 			default:
-				out_buffer = malloc(strlen((char*)buf) * 2);
+				out_buffer = malloc(strlen((char*)buf) * 2); /* -n options */
 				*out_size += sprintf(out_buffer+*out_size,"%x", num);
 				break;
 		}
-
 		return out_buffer;
 	}
 
-
 #ifdef md5_INCLUDED
-	/*********************
-	 *        MD5 Sum        *
-	 *********************/
+	/* MD5 */
 	if (config->mode == 11)
 	{
 		// MD5 state structure
@@ -90,7 +80,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 		static md5_byte_t	digest[16];
 		
 		
-		if (!md5_mode)	// true when first time
+		if (!md5_mode)	/* first time true */
 		{
 			md5_init(&md5_state);
 			mode = 1;
@@ -98,7 +88,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 
 		md5_append(&md5_state, (unsigned char*) buf, len);
 
-		if (mode)	// true when the end of computation
+		if (mode)	/* true at the end of computation */
 		{
 			out_buffer = malloc(sizeof(digest)*2+sizeof(char));
 		
@@ -106,11 +96,11 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 
 			int	wrote=0;
 
-			// write binary hash in humanly hex format
+			/* write binary hash in hex format */
 			for (i = 0; i < 16; ++i)
 				wrote += sprintf(out_buffer+wrote,"%02x", digest[i]);
 
-			// size of result
+			/* size of the result */
 			*out_size = wrote;
 			
 			return out_buffer;
@@ -121,7 +111,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 #else
 	if (config->mode == 11)
 	{
-		exit_error("MD5 encoding has been disabled at compilation time, sorry.");
+		exit_error("MD5 encoding has been disabled on compilation time.");
 		return NULL;
 	}
 #endif
@@ -129,23 +119,19 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 	int	alloc_size = len;
 	int	calc_alloc = 0;
 	out_buffer = malloc(alloc_size *= 2);
-	calc_alloc = alloc_size / 5 * 4;	// 4/5 of allocated memspace
+	calc_alloc = alloc_size / 5 * 4;	/* 4/5 of the allocated memspace */
 
-	/****************************
-	 * char convertion alhoritm *
-	 ****************************/
+	/* char convertion alhoritm */
 	for (i=0; i < len; i++)
 	{
-		if (*out_size > calc_alloc)	// if used 4/5 of allocated memspace
+		if (*out_size > calc_alloc)	/* if used 4/5 of the allocated memspace */
 		{
-			alloc_size += calc_alloc/4;	// increase 1/5 of allocated memspace
+			alloc_size += calc_alloc/4;	/* increase 1/5 of the allocated memspace */
 			out_buffer = realloc(out_buffer, alloc_size);
-			calc_alloc = alloc_size / 5 * 4;	// 4/5 of allocated memspace
+			calc_alloc = alloc_size / 5 * 4;	/* 4/5 of the allocated memspace */
 		}
 	
-		/****************************
-		 * include and exclude char *
-		 ****************************/
+		/* include and exclude chars */
 		if (config->exclude_symbols_size)
 			if (memchr(config->exclude_symbols, buf[i],
 				config->exclude_symbols_size))
@@ -159,9 +145,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 						continue;
 					}
 
-		/****************************
-		 *        Sort by CR.       *
-		 ****************************/
+		/* Sort by CR. */
 		if (config->nlign)
 		{
 #ifdef WIN32
@@ -179,21 +163,15 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 			}
 		}
 
-		/************************************
-		 * Primary convertion method analys *
-		 ************************************/
+		/* Primary convertion method analys */
 		switch(config->mode)
 		{
-			/*********************************
-			 *   Plain hex style convertion  *
-			 *********************************/
+			/* Plain hex style convertion */
 			case 9:
 				*out_size += sprintf(out_buffer+*out_size,"%02x",buf[i]);
 				break;
 
-			/*********************************
-			 *   AT&T asm style convertion   *
-			 *********************************/
+			/* AT&T asm style convertion */
 			case 1:
 				if (i)
 					switch (config->mode2)
@@ -211,9 +189,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 					*out_size += sprintf(out_buffer+*out_size,"0x%02x", buf[i]);
 				break;
 
-			/**********************************
-			 *  Microsoft assembler hex style *
-			 **********************************/
+			/* Microsoft assembler hex style */
 			case 2:
 				if (i)
 					switch (config->mode2)
@@ -231,9 +207,7 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 					*out_size += sprintf(out_buffer+*out_size,"%02xh", buf[i]);
 				break;
 
-			/******************************
-			 *    MySQL Style convertion  *
-			 ******************************/
+			/* MySQL Style convertion */
 			case 3:
 				switch(config->mode2)
 				{
@@ -258,20 +232,16 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 				break;
 
 
-			/****************************
-			 *        URL format        *
-			 ****************************/
+			/* URL format */
 			case 4:
 				*out_size += sprintf(out_buffer+*out_size,"%%%02x",buf[i]);
 				break;
 
-			/******************************
-			 * HTML Style char convertion *
-			 ******************************/
+			/* HTML Style char convertion */
 			case 5:
 				switch (config->mode2)
 				{
-					case 1: // for output in HTML escape codes: &iexcl;&#x78;&copy;... (func in devel!
+					case 1: // as HTML escape codes: &iexcl;&#x78;&copy;...
 						switch (buf[i])
 						{
 							case 0x20:
@@ -603,14 +573,12 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 						*out_size += sprintf(out_buffer+*out_size,"&#%d",buf[i]); 
 						break;
 					default:
-						*out_size += sprintf(out_buffer+*out_size,"&#x%x",buf[i]); // HTML hex-format
+						*out_size += sprintf(out_buffer+*out_size,"&#x%x",buf[i]); /* HTML hex-format */
 				}
 				break;
 
 
-			/**********************************
-			 *    C-style char convertion     *
-			 **********************************/
+			/* C-style char convertion */
 			case 8: 
 				switch (config->mode2)
 				{
@@ -672,4 +640,3 @@ char *process(unsigned char *buf, size_t *out_size, size_t len, struct _config *
 
 	return out_buffer;
 }
-

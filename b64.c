@@ -2,7 +2,7 @@
  * b64.c
  * This file is part of str2hex project.
  *
- * Copyright 2005 Dzmitry Plashchynski plashchynski@gmail.com
+ * Copyright 2005 Dzmitry Plashchynski <plashchynski@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
- #include <stdio.h>
- #include <stdlib.h>
- 
- #include "b64.h"
- 
-  
- 
- void base64_init(base64_state_t *stat)
- {
- 	stat->remlen = 0;
- }
- 
- 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "b64.h"
+
+void base64_init(base64_state_t *stat)
+{
+	stat->remlen = 0;
+}
+
 char *base64_append(base64_state_t *stat, char *in , size_t in_len, size_t *out_len, int mode)
 {
 	int i=0, i2=0;
@@ -86,4 +82,3 @@ char *base64_append(base64_state_t *stat, char *in , size_t in_len, size_t *out_
 
 	return out;
 }
-

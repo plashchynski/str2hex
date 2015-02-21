@@ -7,9 +7,8 @@ str2hex: $(OBJS)
 	gcc $(OBJS) -o $@
 
 .c.o:
-	gcc -Wall -ggdb -c $^ -o $@
+	gcc -Wall -g -c $^ -o $@
 
 clean:
 	rm -f *.o
 	rm -f str2hex
-
