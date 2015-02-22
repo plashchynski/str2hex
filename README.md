@@ -3,7 +3,7 @@ str2hex - Data formats convertion utility.
 
 A data conversion utility that convert files or strings to different representations of Hexadecimal number encodings, as well as Base64, and even MD5.
 
-It was one of my first C program written more than 10 years ago, so don't do not judge strictly :)
+It was one of my first C program written more than 10 years ago, so don't judge strictly :)
 
 ### Building
 It is as simple as:
